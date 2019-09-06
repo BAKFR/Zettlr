@@ -103,6 +103,13 @@ class SaveImage extends ZettlrCommand {
       // Insert a relative path instead of an absolute one
       let pathToInsert = path.relative(currentFilePath, imagePath)
 
+      // Path must be URI-encoded to avoid misinterpreted characters. Use of
+      // encodeURI() is more correct, but produce ugly URL (percent-encoding of
+      // all spaces and Unicode characters). Practically, '%' and '#' are the
+      // only symbols that produces incorrect URLs.
+      // Note that braces and parenthesis (not escaped here) may break markdown parsing.
+      pathToInsert = pathToInsert.replace('%', '%25').replace('#', '%23')
+
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `![${target.name}](${pathToInsert})\n`)
       // Tada!
