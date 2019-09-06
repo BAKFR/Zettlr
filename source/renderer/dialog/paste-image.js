@@ -38,6 +38,7 @@ class PasteImage extends ZettlrDialog {
       // the original URL to it as text into the clipboard. In this case
       // we've already got a good image name!
       data.imageName = path.basename(clipboard.readText(), path.extname(clipboard.readText()))
+      data.imageName = decodeURIComponent(data.imageName)
     } else {
       // In case there is no potential basename we could extract, simply
       // hash the dataURL. This way we can magically also prevent the same
